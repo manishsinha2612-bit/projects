@@ -20,14 +20,17 @@
             <div class="portfolio">
                 <h1>Portfolio</h1>
             </div>
-            <div class="home">
+            <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+            <div class="home nav-links">
                 <p>Home</p>
                 <p>About</p>
                 <p>Skills</p>
                 <p>Projects</p>
                 <p>Contact</p>
             </div>
-        </div>
+        </div> 
 
 
 
@@ -209,6 +212,17 @@
     </div>
       </div>
 
+    <script>
+      const navToggle = document.querySelector('.nav-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      if (navToggle && navLinks) {
+        navToggle.addEventListener('click', () => {
+          const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+          navToggle.setAttribute('aria-expanded', String(!expanded));
+          navLinks.classList.toggle('open');
+        });
+      }
+    </script>
 </body>
 
 </html>
