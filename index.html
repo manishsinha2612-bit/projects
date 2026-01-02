@@ -24,11 +24,12 @@
                 <span class="hamburger"></span>
             </button>
             <div class="home nav-links">
-                <p>Home</p>
-                <p>About</p>
-                <p>Skills</p>
-                <p>Projects</p>
-                <p>Contact</p>
+                <a href="#myself">Home</a>
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Project</a>   
+                <a href="#feedback">contact</a>                 
+                
             </div>
         </div> 
 
@@ -36,7 +37,7 @@
 
 
         <!-- my self section -->
-        <div class="myself">
+        <div class="myself" id="myself">
             <div class="profile-content">
                 <div class="all-content">
                     <p id="hi">Hi, I am</p>
@@ -64,7 +65,7 @@
 
         <!-- about section started -->
 
-        <div class="about">
+        <div class="about" id="about">
             <!-- <div class="aboutbox">
                 <div class="aboutname">
                     <div class="naam">
@@ -104,7 +105,7 @@
 
 
     <!-- skilled section started -->
-    <div class="skills">
+    <div class="skills" id="skills">
         <div class="top">
             <div class="name">
                 <img class="icon" src="skills.png" alt="" width="60px">
@@ -153,7 +154,7 @@
 
 
     <!-- projects started here -->
-    <div class="projects">
+    <div class="projects" id="projects">
         <div class="headline">
             <div class="projectname">
                 <h1>Projects</h1>
@@ -171,7 +172,7 @@
 
 
     <!-- feedback started here -->
-    <div class="feedback">
+    <div class="feedback" id="feedback">
         <div class="letsconnect">
             <div class="social">
                 <h1>Let's Connect</h1>
@@ -182,11 +183,11 @@
                 <p id="lets">These platforms showcase my journey, work, and creative <br>
                     Feel free to connect and start a conversation.</p>
                 <div class="icons">
-                    <img src="behance.png" alt="" width="50px">
-                    <img src="linkedin.png" alt="" width="50px">
-                    <img src="instagram.png" alt="" width="50px">
-                    <img src="facebook.png" alt="" width="50px">
-                    <img src="github.png" alt="" width="50px">
+                    <a id="git" href="https://www.behance.net/mannishsinha"><img src="behance.png" alt="" width="50px"></a>
+                    <a id="git" href="https://www.linkedin.com/in/manish-kumar-sinha-13bb7a20b/"><img src="linkedin.png" alt="" width="50px"></a>
+                    <a id="git" href="https://www.instagram.com/main.khamakha26/"><img src="instagram.png" alt="" width="50px"></a>
+                    <a id="git" href="https://www.facebook.com/main.khamakha26"><img src="facebook.png" alt="" width="50px"></a>
+                    <a id="git" href="https://github.com/manishsinha2612-bit"><img src="github.png" alt="" width="50px"></a>
                 </div>
             </div>
             <div class="massege">
@@ -223,6 +224,115 @@
         });
       }
     </script>
-</body>
+    <script>
+    (function(){
+      const body = document.body;
+      const cursor = document.createElement('div');
+      const follower = document.createElement('div');
+      cursor.className = 'cursor';
+      follower.className = 'cursor-follower';
+      body.appendChild(follower);
+      body.appendChild(cursor);
+
+      let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
+      let posX = mouseX, posY = mouseY;
+      const lerp = (a,b,n) => (1-n)*a + n*b;
+
+      function parseRGB(rgb){
+        const m = rgb && rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+        return m ? [parseInt(m[1],10), parseInt(m[2],10), parseInt(m[3],10)] : null;
+      }
+      function rgbToHex(rgb){
+        const vals = parseRGB(rgb);
+        if(!vals) return null;
+        return '#'+vals.map(v=> v.toString(16).padStart(2,'0')).join('').toLowerCase();
+      }
+      function getEffectiveBgColor(el){
+        while(el && el !== document.documentElement){
+          const bg = getComputedStyle(el).backgroundColor;
+          if(bg && bg !== 'transparent' && !/rgba?\(0,\s*0,\s*0,\s*0\)/i.test(bg)) return bg;
+          el = el.parentElement;
+        }
+        return getComputedStyle(document.body).backgroundColor || 'rgb(255,255,255)';
+      }
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+        follower.style.left = mouseX + 'px';
+        follower.style.top = mouseY + 'px';
+        cursor.classList.remove('cursor--hidden');
+        follower.classList.remove('cursor--hidden');
+
+        // detect underlying background and swap cursor colors
+        const el = document.elementFromPoint(mouseX, mouseY);
+        const bg = getEffectiveBgColor(el);
+        const hex = rgbToHex(bg);
+        const PURPLE = '#5838db';
+        const WHITE = '#ffffff';
+        if(hex === PURPLE){
+          cursor.classList.add('cursor--on-purple');
+          cursor.classList.remove('cursor--on-white');
+          follower.classList.add('on-purple');
+          follower.classList.remove('on-white');
+        } else if(hex === WHITE){
+          cursor.classList.add('cursor--on-white');
+          cursor.classList.remove('cursor--on-purple');
+          follower.classList.add('on-white');
+          follower.classList.remove('on-purple');
+        } else {
+          cursor.classList.remove('cursor--on-white');
+          cursor.classList.remove('cursor--on-purple');
+          follower.classList.remove('on-white');
+          follower.classList.remove('on-purple');
+        }
+
+      });
+
+      function animate() {
+        posX = lerp(posX, mouseX, 0.16);
+        posY = lerp(posY, mouseY, 0.16);
+        follower.style.transform = `translate(-50%,-50%) translate(${posX - mouseX}px, ${posY - mouseY}px)`;
+        requestAnimationFrame(animate);
+      }
+      animate();
+
+      const hoverSelector = 'a, button, input, textarea, .nav-toggle, .first, .second, .project1, .project2, .project3';
+      document.querySelectorAll(hoverSelector).forEach(el=>{
+        el.addEventListener('mouseenter', ()=> {
+          cursor.classList.add('cursor--big');
+          follower.classList.add('cursor--big');
+        });
+        el.addEventListener('mouseleave', ()=> {
+          cursor.classList.remove('cursor--big');
+          follower.classList.remove('cursor--big');
+        });
+      });
+
+      document.addEventListener('mouseleave', ()=> {
+        cursor.classList.add('cursor--hidden');
+        follower.classList.add('cursor--hidden');
+      });
+      document.addEventListener('mouseenter', ()=> {
+        cursor.classList.remove('cursor--hidden');
+        follower.classList.remove('cursor--hidden');
+      });
+
+      document.addEventListener('mousedown', ()=> {
+        cursor.classList.add('cursor--active');
+        follower.classList.add('cursor--active');
+      });
+      document.addEventListener('mouseup', ()=> {
+        cursor.classList.remove('cursor--active');
+        follower.classList.remove('cursor--active');
+      });
+
+      const formEls = document.querySelectorAll('input, textarea, select');
+      formEls.forEach(el => el.addEventListener('mouseenter', ()=> el.style.cursor = 'auto'));
+
+    })();
+    </script></body>
 
 </html>
